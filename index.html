@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>Poor – v2.2</title>
+<title>Poor – v2.3</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -247,7 +247,7 @@ nav.bottom-nav{padding-bottom:max(1.5rem,env(safe-area-inset-bottom,1.5rem))}
   <div class="flex items-center gap-2.5">
     <img src="https://res.cloudinary.com/da3wvlqvd/image/upload/q_auto/f_auto/v1775663717/abstract_letter_P_logo_hmim74.jpg" class="w-8 h-8 rounded-xl object-cover shadow-md" alt="Poor logo"/>
     <h1 class="font-headline tracking-tight text-xl font-extrabold metallic">Poor</h1>
-    <span class="text-[10px] text-outline border border-outline-variant/30 rounded-full px-2 py-0.5">v2.2</span>
+    <span class="text-[10px] text-outline border border-outline-variant/30 rounded-full px-2 py-0.5">v2.3</span>
   </div>
   <div class="flex items-center gap-1.5">
     <div class="lang-pill"><button id="btn-vi" class="active" onclick="setLang('vi')">VI</button><button id="btn-en" onclick="setLang('en')">EN</button></div>
@@ -278,6 +278,26 @@ nav.bottom-nav{padding-bottom:max(1.5rem,env(safe-area-inset-bottom,1.5rem))}
           <p class="text-[10px] text-outline uppercase tracking-wider mb-1" id="lbl-exp">Chi tiêu T.này</p>
           <p class="font-headline font-bold text-expense text-lg" id="home-expense">-$0.00</p>
         </div>
+      </div>
+      <!-- Debt summary inline -->
+      <div class="mt-3 pt-3 border-t border-outline-variant/15 grid grid-cols-2 gap-3">
+        <div>
+          <p class="text-[10px] text-outline uppercase tracking-wider mb-1">Họ nợ tui</p>
+          <p class="font-headline font-bold text-income text-base" id="home-debt-owed">+$0.00</p>
+        </div>
+        <div>
+          <p class="text-[10px] text-outline uppercase tracking-wider mb-1">Tui nợ họ</p>
+          <p class="font-headline font-bold text-expense text-base" id="home-debt-iowe">-$0.00</p>
+        </div>
+      </div>
+      <!-- True net balance -->
+      <div class="mt-3 pt-3 border-t border-outline-variant/15 flex items-center justify-between">
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm text-on-surface-variant">account_balance</span>
+          <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Tổng số dư thực tế</span>
+          <div class="tip-wrap"><button class="tip-btn">?</button><div class="tip-box">Số dư + (họ nợ tui) - (tui nợ họ). Phản ánh tài chính thực tế của bạn.</div></div>
+        </div>
+        <p class="font-headline font-bold text-sm" id="home-true-balance">$0.00</p>
       </div>
     </div>
     <div class="bg-surface-container-high rounded-[18px] p-4 mb-4">
@@ -420,8 +440,13 @@ nav.bottom-nav{padding-bottom:max(1.5rem,env(safe-area-inset-bottom,1.5rem))}
       </div>
       <div class="bg-surface-container-low rounded-[16px] p-4">
         <p class="text-[10px] text-outline uppercase mb-1" id="lbl-i-owe">Tui nợ người khác</p>
-        <p class="font-headline font-bold text-debt text-xl" id="debt-i-owe">$0</p>
+        <p class="font-headline font-bold text-expense text-xl" id="debt-i-owe">$0</p>
       </div>
+    </div>
+    <!-- Net debt balance -->
+    <div class="bg-surface-container rounded-[14px] p-3 mb-4 flex items-center justify-between">
+      <div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-on-surface-variant">account_balance</span><span class="text-xs text-on-surface-variant">Số dư nợ ròng</span></div>
+      <span class="font-bold text-sm" id="debt-net-display">$0</span>
     </div>
     <div class="flex gap-2 mb-4">
       <button id="debt-tab-all" class="filter-btn af flex-1 py-2 rounded-xl text-xs font-bold" onclick="setDebtTab('all',this)">Tất cả</button>
@@ -576,15 +601,16 @@ nav.bottom-nav{padding-bottom:max(1.5rem,env(safe-area-inset-bottom,1.5rem))}
           <span class="text-[9px] text-outline uppercase tracking-wider mr-1 self-center">Ví dụ:</span>
           <button class="quick-shortcut-chip" onclick="appendQuick('-50k ăn sáng\n')"><span class="text-expense">-</span>50k ăn sáng</button>
           <button class="quick-shortcut-chip" onclick="appendQuick('+2tr lương\n')"><span class="text-income">+</span>2tr lương</button>
-          <button class="quick-shortcut-chip" onclick="appendQuick('-30000 grab\n')"><span class="text-expense">-</span>30k grab</button>
-          <button class="quick-shortcut-chip" onclick="appendQuick('-15.5 coffee\n')"><span class="text-expense">-</span>15.5 coffee</button>
-          <button class="quick-shortcut-chip" onclick="appendQuick('+500000 freelance\n')"><span class="text-income">+</span>500k freelance</button>
+          <button class="quick-shortcut-chip" onclick="appendQuick('grab 30k\n')">grab 30k</button>
+          <button class="quick-shortcut-chip" onclick="appendQuick('cafe 45000\n')">cafe 45000</button>
+          <button class="quick-shortcut-chip" onclick="appendQuick('+500k freelance\n')"><span class="text-income">+</span>500k freelance</button>
+          <button class="quick-shortcut-chip" onclick="appendQuick('siêu thị 1tr2\n')">siêu thị 1tr2</button>
         </div>
 
         <textarea
           id="quick-input-area"
           class="quick-textarea"
-          placeholder="-50000 Ăn sáng&#10;+200000 Lương&#10;-30k Grab&#10;-1.5tr Mua sắm&#10;+2tr Freelance&#10;&#10;Hỗ trợ: k=1,000 · tr=1,000,000 · USD nếu số nhỏ"
+          placeholder="-50k ăn sáng&#10;grab 30000&#10;ăn trưa: 45k&#10;+2tr lương&#10;cafe 1tr2&#10;&#10;Hỗ trợ: k=1,000 · tr=1,000,000 · 1tr5=1,500,000&#10;Tự nhận danh mục từ nội dung 🤖"
           oninput="liveParseQuick()"
           spellcheck="false"
         ></textarea>
@@ -989,8 +1015,10 @@ async function loadFromUID(){
   const status=document.getElementById('uid-status');status.textContent='Đang tìm...';status.className='text-xs text-outline';
   const db=getSupa();if(!db){status.textContent='⚠ Không thể kết nối';return;}
   try{
-    const{data,error}=await db.from('poor_data_v2').select('payload').eq('device_id',targetUID).single();
-    if(error||!data?.payload){status.textContent='❌ Không tìm thấy UID';status.className='text-xs text-expense';return;}
+    // Use maybeSingle() instead of single() to avoid error when no row found
+    const{data,error}=await db.from('poor_data_v2').select('payload').eq('device_id',targetUID).maybeSingle();
+    if(error){status.textContent='❌ Lỗi kết nối: '+error.message;status.className='text-xs text-expense';return;}
+    if(!data||!data.payload){status.textContent='❌ Không tìm thấy UID này. Kiểm tra lại UID hoặc người dùng chưa đồng bộ.';status.className='text-xs text-expense';return;}
     const d=JSON.parse(data.payload);viewingUID=targetUID;
     transactions=d.transactions||[];nextId=d.nextId||1;
     userProfile={...userProfile,...(d.userProfile||{})};categories=d.categories||categories;wallets=d.wallets||wallets;
@@ -1042,12 +1070,25 @@ function getInitBal(){const b=userProfile.initialBalance||0,c=userProfile.initia
 function getTotal(){return getInitBal()+transactions.reduce((s,t)=>s+t.amount,0);}
 function getMonthSpent(){const n=new Date();return transactions.filter(t=>{const d=new Date(t.date);return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()&&t.amount<0;}).reduce((s,t)=>s+Math.abs(t.amount),0);}
 function getMonthIncome(){const n=new Date();return transactions.filter(t=>{const d=new Date(t.date);return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()&&t.amount>0;}).reduce((s,t)=>s+t.amount,0);}
+function getDebtOwedMe(){return debts.filter(d=>d.type==='owed'&&!d.paid).reduce((s,d)=>s+d.amountUSD,0);}
+function getDebtIOwe(){return debts.filter(d=>d.type==='iowe'&&!d.paid).reduce((s,d)=>s+d.amountUSD,0);}
 function renderBalance(){
   const total=getTotal();
   const el=document.getElementById('balance-display');if(el){el.textContent=fmtA(Math.abs(total));el.className='font-headline font-extrabold text-[2.6rem] leading-none tracking-tight mb-1 '+(total>=0?'text-balance':'text-expense');}
   const sub=document.getElementById('balance-sub');if(sub)sub.textContent=(currentLang==='vi'?'Chi tháng: ':'Month spent: ')+fmtP(getMonthSpent());
   const inc=document.getElementById('home-income');if(inc)inc.textContent='+'+fmtA(getMonthIncome());
   const exp=document.getElementById('home-expense');if(exp)exp.textContent='-'+fmtA(getMonthSpent());
+  // Debt info on home card
+  const dOwed=getDebtOwedMe(),dIOwe=getDebtIOwe();
+  const hdOwed=document.getElementById('home-debt-owed');if(hdOwed)hdOwed.textContent='+'+fmtA(dOwed);
+  const hdIOwe=document.getElementById('home-debt-iowe');if(hdIOwe)hdIOwe.textContent='-'+fmtA(dIOwe);
+  const trueBalance=total+dOwed-dIOwe;
+  const htb=document.getElementById('home-true-balance');if(htb){htb.textContent=(trueBalance>=0?'+':'')+fmtA(Math.abs(trueBalance));htb.className='font-headline font-bold text-sm '+(trueBalance>=0?'text-income':'text-expense');}
+  // Debt page totals
+  const dme=document.getElementById('debt-owed-me');if(dme)dme.textContent='+'+fmtP(dOwed);
+  const die=document.getElementById('debt-i-owe');if(die)die.textContent='-'+fmtP(dIOwe);
+  const netDebt=dOwed-dIOwe;
+  const dnet=document.getElementById('debt-net-display');if(dnet){dnet.textContent=(netDebt>=0?'+':'')+fmtA(Math.abs(netDebt));dnet.className='font-bold text-sm '+(netDebt>=0?'text-income':'text-expense');}
   const spent=getMonthSpent(),pct=Math.min(100,monthlyBudget>0?(spent/monthlyBudget)*100:0);
   const bar=document.getElementById('home-bar');if(bar)bar.style.width=pct+'%';
   const sl=document.getElementById('home-spent-lbl');if(sl)sl.textContent=fmtP(spent);
@@ -1254,19 +1295,18 @@ function importDebtText(){
   else showToast('⚠ Không tìm thấy dữ liệu');
 }
 function renderDebts(){
-  const owedMe=debts.filter(d=>d.type==='owed'&&!d.paid).reduce((s,d)=>s+d.amountUSD,0);
-  const iOwe=debts.filter(d=>d.type==='iowe'&&!d.paid).reduce((s,d)=>s+d.amountUSD,0);
-  const om=document.getElementById('debt-owed-me');if(om)om.textContent=fmtP(owedMe);
-  const io=document.getElementById('debt-i-owe');if(io)io.textContent=fmtP(iOwe);
+  // Update balance/totals via renderBalance (which handles debt-owed-me and debt-i-owe)
+  renderBalance();
   const c=document.getElementById('debt-list');if(!c)return;
   let filtered=debts;
   if(currentDebtTab==='owed')filtered=debts.filter(d=>d.type==='owed'&&!d.paid);
   else if(currentDebtTab==='iowe')filtered=debts.filter(d=>d.type==='iowe'&&!d.paid);
   else if(currentDebtTab==='paid')filtered=debts.filter(d=>d.paid);
   if(!filtered.length){c.innerHTML=`<div class="text-center py-12 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-3xl mb-2 block opacity-20">handshake</span>Không có khoản nợ</div>`;return;}
-  c.innerHTML=filtered.sort((a,b)=>b.id-a.id).map(d=>{const isOwed=d.type==='owed',cls=isOwed?'text-income':'text-debt',borderCls=d.paid?'debt-card paid':isOwed?'debt-card owed-me':'debt-card i-owe';
-    return`<div class="${borderCls}"><div class="flex justify-between items-start mb-2"><div class="flex items-center gap-2"><span class="material-symbols-outlined ${cls} text-base">${isOwed?'arrow_downward':'arrow_upward'}</span><div><p class="font-bold text-on-surface text-sm">${d.name}</p><p class="text-[10px] text-on-surface-variant">${d.date}${d.note?' · '+d.note:''}</p></div></div><span class="font-bold ${cls} text-base">${fmtP(d.amountUSD)}</span></div>
-    <div class="flex items-center justify-between mt-3"><div class="flex gap-2">${d.paid?`<span class="badge-paid">✓ Đã thanh toán</span>`:`<span class="badge-unpaid">⏳ Chưa trả</span>`}<span class="text-[10px] text-outline border border-outline-variant/20 rounded-full px-2 py-0.5">${isOwed?'Họ nợ tui':'Tui nợ họ'}</span></div>
+  c.innerHTML=filtered.sort((a,b)=>b.id-a.id).map(d=>{const isOwed=d.type==='owed',cls=isOwed?'text-income':'text-expense',borderCls=d.paid?'debt-card paid':isOwed?'debt-card owed-me':'debt-card i-owe';
+    const amtDisplay=`<span class="font-bold ${cls} text-base">${isOwed?'+':'-'}${fmtP(d.amountUSD)}</span>`;
+    return`<div class="${borderCls}"><div class="flex justify-between items-start mb-2"><div class="flex items-center gap-2"><span class="material-symbols-outlined ${cls} text-base">${isOwed?'arrow_circle_down':'arrow_circle_up'}</span><div><p class="font-bold text-on-surface text-sm">${d.name}</p><p class="text-[10px] text-on-surface-variant">${d.date}${d.note?' · '+d.note:''}</p></div></div>${amtDisplay}</div>
+    <div class="flex items-center justify-between mt-3"><div class="flex gap-2">${d.paid?`<span class="badge-paid">✓ Đã thanh toán</span>`:`<span class="badge-unpaid">⏳ Chưa trả</span>`}<span class="text-[10px] ${isOwed?'text-income':'text-expense'} border border-current/20 rounded-full px-2 py-0.5 font-semibold">${isOwed?'💚 Họ nợ tui':'❤️ Tui nợ họ'}</span></div>
     <div class="flex gap-2"><button onclick="toggleDebtPaid(${d.id})" class="text-[10px] font-bold px-2 py-1 rounded-lg ${d.paid?'bg-surface-container text-on-surface-variant':'bg-income/10 text-income'}">${d.paid?'↩':'✓'}</button><button onclick="openDebtForm(${d.id})" class="text-[10px] text-on-surface-variant font-bold px-2 py-1 rounded-lg bg-surface-container">Sửa</button><button onclick="delDebt(${d.id})" class="text-[10px] text-expense font-bold px-2 py-1 rounded-lg bg-expense/10">✕</button></div></div></div>`;}).join('');
 }
 
@@ -1291,7 +1331,33 @@ function confirmNoteImport(){
   pendingNoteImports.forEach((tx,i)=>{const cb=document.getElementById(`ni-${i}`);if(!cb?.checked)return;const cg=guessCat(tx.desc);transactions.unshift({id:nextId++,name:tx.desc,category:cg.name,icon:cg.icon,amount:tx.usd,date,time,method:'Note',wallet:wallets[0]?.name||'Tiền mặt',note:'[Ghi chú]',receipt:null,recurring:false});count++;});
   if(count>0){saveData();renderAll();showToast('✓ Đã nhập '+count+' giao dịch');}closeNoteImport();
 }
-function guessCat(d){const s=d.toLowerCase();if(s.match(/ăn|cơm|phở|bún|bữa|café|café|sáng|trưa|tối|food|eat|ăn uống/))return{name:'Ăn uống',icon:'restaurant'};if(s.match(/xe|bus|grab|taxi|xăng|transport|di chuyển/))return{name:'Di chuyển',icon:'commute'};if(s.match(/thuốc|bệnh|khám|gym|health|sức khỏe/))return{name:'Sức khỏe',icon:'fitness_center'};if(s.match(/mua|shop|quần|áo|buy|mua sắm/))return{name:'Mua sắm',icon:'shopping_bag'};if(s.match(/điện|nước|bill|hóa đơn/))return{name:'Hóa đơn',icon:'electric_bolt'};if(s.match(/nhà|rent|thuê|house/))return{name:'Nhà ở',icon:'home'};if(s.match(/lương|salary|income|freelance|thưởng/))return{name:'Thu nhập',icon:'payments'};if(s.match(/game|giải trí|phim|cafe|giải tri/))return{name:'Giải trí',icon:'theater_comedy'};return{name:'Khác',icon:'more_horiz'};}
+function guessCat(d){
+  const s=d.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // remove diacritics for matching
+    .replace(/đ/g,'d');
+  const orig=d.toLowerCase();
+  // Ăn uống - very comprehensive
+  if(orig.match(/ăn|uống|cơm|phở|bún|bữa|café|cafe|sáng|trưa|tối|khuya|snack|trà|trà sữa|milk tea|bánh|pizza|burger|mì|hủ tiếu|cháo|lẩu|nướng|nhậu|bia|nước|coca|pepsi|highland|starbuck|gà|thịt|cá|rau|soup|bun|pho|com|bun bo|banh mi|bánh mì|kem|dessert|sweet|drinks?|food|eat|meal|lunch|dinner|breakfast|fastfood|kfc|mcdo|jollibee|pizza|sushi|ramen|udon/) || s.match(/an uong|an sang|an trua|an toi|tra sua|nuoc ngot|do uong/))return categories.find(c=>c.name==='Ăn uống')||{name:'Ăn uống',icon:'restaurant'};
+  // Di chuyển
+  if(orig.match(/xe|bus|grab|taxi|xăng|xăng dầu|gojek|be |be$|giao thông|vé|tàu|máy bay|uber|shipper|ship|vận chuyển|parking|đỗ xe|rửa xe|sửa xe|car|bike|motor|transport|move|travel|flight|train|go car|go bike/) || s.match(/di chuyen|xe may|o to|xang dau|gia xe|sua xe/))return categories.find(c=>c.name==='Di chuyển')||{name:'Di chuyển',icon:'commute'};
+  // Sức khỏe
+  if(orig.match(/thuốc|bệnh|khám|bác sĩ|viện|phòng khám|gym|yoga|spa|massage|thể dục|tập|vitamin|supplement|health|medicine|hospital|clinic|doctor|sport|chạy bộ|swimming|bơi/) || s.match(/suc khoe|thuoc|kham benh|phong kham|the duc/))return categories.find(c=>c.name==='Sức khỏe')||{name:'Sức khỏe',icon:'fitness_center'};
+  // Mua sắm
+  if(orig.match(/mua|shop|quần|áo|giày|dép|túi|phụ kiện|trang sức|mỹ phẩm|son|phấn|serum|skincare|shopee|lazada|tiki|amazon|fashion|clothes|shoes|buy|order|đặt hàng|online|market|siêu thị|chợ|grocery/) || s.match(/mua sam|quan ao|sieu thi|cho|online shop/))return categories.find(c=>c.name==='Mua sắm')||{name:'Mua sắm',icon:'shopping_bag'};
+  // Hóa đơn
+  if(orig.match(/điện|nước|internet|wifi|điện thoại|viễn thông|bill|hóa đơn|gas|viettel|mobifone|vinaphone|fpt|vnpt|evn|electric|water|phone bill|subscription|netflix|spotify|youtube premium/) || s.match(/hoa don|tien dien|tien nuoc|tien internet|tra gop/))return categories.find(c=>c.name==='Hóa đơn')||{name:'Hóa đơn',icon:'electric_bolt'};
+  // Nhà ở
+  if(orig.match(/nhà|rent|thuê|phòng|chung cư|apartment|house|home|sửa nhà|nội thất|furniture|dọn dẹp|vệ sinh|cleaning/) || s.match(/tien nha|thue nha|phong tro|sua nha/))return categories.find(c=>c.name==='Nhà ở')||{name:'Nhà ở',icon:'home'};
+  // Thu nhập
+  if(orig.match(/lương|salary|income|freelance|thưởng|bonus|tiền công|hoa hồng|commission|refund|hoàn tiền|transfer in|nhận|revenue|profit|earn/) || s.match(/luong|thu nhap|nhan tien|thuong/))return categories.find(c=>c.name==='Thu nhập')||{name:'Thu nhập',icon:'payments'};
+  // Giải trí
+  if(orig.match(/game|giải trí|phim|cinema|rạp|hát|karaoke|du lịch|travel|vacation|resort|hotel|khách sạn|concert|show|vui chơi|party|tiệc|event|streaming|netflix|spotify|tiktok|youtube|entertainment|fun|bar|club|billiard|bida|bowling/) || s.match(/giai tri|phim|du lich|karaoke/))return categories.find(c=>c.name==='Giải trí')||{name:'Giải trí',icon:'theater_comedy'};
+  // Fallback to user-defined categories
+  for(const cat of categories){
+    if(s.includes(cat.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d')))return cat;
+  }
+  return{name:'Khác',icon:'more_horiz'};
+}
 function renderNotes(){
   const c=document.getElementById('notes-list');if(!c)return;
   if(!notes.length){c.innerHTML=`<div class="text-center py-10 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-3xl mb-2 block opacity-20">note</span>Chưa có ghi chú</div>`;return;}
@@ -1385,16 +1451,21 @@ function switchMode(mode){
 
 // ===== QUICK INPUT PARSER =====
 /**
- * Parse number with shortcuts: 50k=50000, 1.5tr=1500000, 2tr=2000000
+ * Parse number with shortcuts: 50k=50000, 1.5tr=1500000, 2tr=2000000, 500k, 1tr5
  * If result < 200 and no suffix → treat as USD
  */
 function parseAmount(raw){
-  const s=raw.trim().toLowerCase();
-  // Strip common Vietnamese suffixes
-  const trMatch=s.match(/^(\d+(?:\.\d+)?)\s*tr(?:iệu)?$/);
-  if(trMatch)return parseFloat(trMatch[1])*1_000_000/USD_VND; // VND→USD
-  const kMatch=s.match(/^(\d+(?:\.\d+)?)\s*k$/);
-  if(kMatch)return parseFloat(kMatch[1])*1_000/USD_VND;
+  const s=raw.trim().toLowerCase().replace(/\s+/g,'');
+  // 1tr5 = 1,500,000 VND
+  const tr5Match=s.match(/^(\d+)tr(\d+)$/);
+  if(tr5Match)return(parseFloat(tr5Match[1])*1_000_000+parseFloat(tr5Match[2])*100_000)/USD_VND;
+  // 1.5tr or 1,5tr
+  const trMatch=s.match(/^(\d+(?:[.,]\d+)?)\s*tr(?:iệu|ieu)?$/);
+  if(trMatch)return parseFloat(trMatch[1].replace(',','.'))*1_000_000/USD_VND;
+  // 50k
+  const kMatch=s.match(/^(\d+(?:[.,]\d+)?)\s*k$/);
+  if(kMatch)return parseFloat(kMatch[1].replace(',','.'))*1_000/USD_VND;
+  // plain number with commas as thousand separator
   const numRaw=parseFloat(s.replace(/,/g,''));
   if(isNaN(numRaw))return null;
   // Heuristic: if >= 1000 it's VND, else USD
@@ -1404,16 +1475,32 @@ function parseAmount(raw){
 function parseQuickLine(line){
   const trimmed=line.trim();
   if(!trimmed||trimmed.startsWith('#'))return null;
-  // Match: [+-] amount desc  OR  amount desc (treat as expense if no sign)
-  const m=trimmed.match(/^([+-]?)\s*([\d,]+(?:\.\d+)?(?:\s*(?:k|tr|triệu))?)\s+(.+)$/i);
-  if(!m)return{raw:trimmed,error:true};
-  const sign=m[1]==='+' ? 1 : -1;
-  const amtRaw=m[2].trim();
-  const desc=m[3].trim();
-  const usd=parseAmount(amtRaw);
-  if(usd===null||usd<=0)return{raw:trimmed,error:true};
-  const cat=guessCat(desc);
-  return{raw:trimmed,sign,amtUSD:sign*usd,desc,cat,error:false};
+
+  // Format 1: [+-] amount desc   e.g. "-50k ăn sáng" or "+200k lương"
+  const m1=trimmed.match(/^([+-]?)\s*([\d,]+(?:[.,]\d+)?(?:\s*(?:k|tr\d*|triệu))?)\s+(.+)$/i);
+  if(m1){
+    const sign=m1[1]==='+' ? 1 : -1;
+    const amtRaw=m1[2].trim();
+    const desc=m1[3].trim();
+    const usd=parseAmount(amtRaw);
+    if(usd!==null&&usd>0){const cat=guessCat(desc);return{raw:trimmed,sign,amtUSD:sign*usd,desc,cat,error:false};}
+  }
+
+  // Format 2: desc: amount  or  desc amount (desc first)  e.g. "ăn sáng 50k" or "ăn sáng: 50k"
+  const m2=trimmed.match(/^(.+?)[:\s]\s*([+-]?)\s*([\d,]+(?:[.,]\d+)?(?:\s*(?:k|tr\d*|triệu))?)\s*$/i);
+  if(m2){
+    const desc=m2[1].trim();
+    const sign2=m2[2]==='+' ? 1 : -1;
+    const amtRaw2=m2[3].trim();
+    const usd2=parseAmount(amtRaw2);
+    // Make sure desc is not just a number
+    if(usd2!==null&&usd2>0&&isNaN(parseFloat(desc))){
+      const cat=guessCat(desc);
+      return{raw:trimmed,sign:sign2,amtUSD:sign2*usd2,desc,cat,error:false};
+    }
+  }
+
+  return{raw:trimmed,error:true};
 }
 
 function liveParseQuick(){
@@ -1432,7 +1519,10 @@ function liveParseQuick(){
     const dispAmt=currentCurrency==='VND'?'₫'+Math.round(Math.abs(r.amtUSD)*USD_VND).toLocaleString('vi-VN'):'$'+Math.abs(r.amtUSD).toFixed(2);
     return`<div class="quick-preview-item ${isExp?'is-exp':'is-inc'}">
       <span class="material-symbols-outlined text-sm flex-shrink-0 ${isExp?'text-expense':'text-income'}">${r.cat.icon}</span>
-      <span class="text-[11px] text-on-surface flex-1 truncate font-medium">${r.desc}</span>
+      <div class="flex-1 min-w-0">
+        <span class="text-[11px] text-on-surface font-medium truncate block">${r.desc}</span>
+        <span class="text-[9px] text-on-surface-variant">${r.cat.name}</span>
+      </div>
       <span class="text-[11px] font-bold flex-shrink-0 ${isExp?'text-expense':'text-income'}">${isExp?'-':'+'}${dispAmt}</span>
     </div>`;
   }).join('');
@@ -1463,10 +1553,13 @@ function confirmQuick(){
   results.forEach(r=>{
     transactions.unshift({id:nextId++,name:r.desc,category:r.cat.name,icon:r.cat.icon,amount:r.amtUSD,date,time,method:wallet,wallet,note:'',receipt:null,recurring:false});
   });
-  saveData();closeOverlay('add-overlay');showToast(`✅ Đã thêm ${results.length} giao dịch`);showPage('home');
+  saveData();
   document.getElementById('quick-input-area').value='';
   document.getElementById('quick-preview').innerHTML='';
   document.getElementById('quick-summary').classList.add('hidden');
+  closeOverlay('add-overlay');
+  showToast(`✅ Đã thêm ${results.length} giao dịch`);
+  setTimeout(()=>{renderAll();showPage('home');},80);
 }
 
 // ===== ADD/EDIT TRANSACTION (DETAIL MODE) =====
