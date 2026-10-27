@@ -2,7 +2,8 @@
 <html lang="vi" data-theme="dark">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<script>(function(){var d=document.documentElement,c=navigator.connection||{},m=navigator.deviceMemory||8,h=navigator.hardwareConcurrency||8;var t=(window.matchMedia&&matchMedia('(hover:none),(pointer:coarse)').matches)||innerWidth<820;window.LITE=t||m<=4||h<=4||c.saveData===true;if(window.LITE)d.classList.add('lite');})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content"/>
 <meta name="theme-color" content="#080604"/>
 <title>Poor — Royal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -602,6 +603,88 @@ html[data-day="0"] #bg .b3{opacity:.65}
 .avatar{animation:breathe 4s ease-in-out infinite}
 @keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(var(--acc),.5)}50%{box-shadow:0 0 0 10px rgba(var(--acc),0)}}
 @media(prefers-reduced-motion:reduce){.orn svg,.okp{animation:none}}
+
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{touch-action:manipulation}
+button,.item,.chip,.tx,.il,.dk,.wc,.cg{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+html.lite{--glass:rgba(14,10,6,.95)}
+html.lite[data-theme=light]{--glass:rgba(247,241,228,.96)}
+html.lite *,html.lite *::before,html.lite *::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.lite #bg{filter:none!important;contain:strict}
+html.lite #bg i{filter:none!important;animation:none!important;will-change:auto;transform:none!important;border-radius:50%}
+html.lite #bg .b1{background:radial-gradient(circle,var(--b1),transparent 68%)}
+html.lite #bg .b2{background:radial-gradient(circle,var(--b2),transparent 68%)}
+html.lite #bg .b3{background:radial-gradient(circle,var(--b3),transparent 68%)}
+html.lite #bg::after{display:none!important}
+html.lite #cur,html.lite #curd{display:none!important}
+html.lite .hero::before,html.lite .hero::after,html.lite .hero-glare,html.lite #splash::before{animation:none!important}
+html.lite .hero-glare{display:none}
+html.lite .hero{will-change:auto;transition:none}
+html.lite .orn svg{animation:none}
+html.lite .orn{display:none}
+html.lite #app{perspective:none}
+html.lite .card{box-shadow:0 10px 24px -16px rgba(0,0,0,.6)}
+html.lite .page.p-exit{animation:lOut .18s ease both}
+html.lite .page.p-enter{animation:lIn .4s cubic-bezier(.16,1,.3,1) both}
+html.lite .page.p-enter .ph h1,html.lite .page.p-enter .greet h1{animation:none}
+html.lite .page.p-enter .list>.tx,html.lite .page.p-enter .stack>.dc,html.lite .page.p-enter .gcards>.ghc,html.lite .page.p-enter #n-list>*,html.lite .page.p-enter #h-list .tx{animation:none}
+html.lite .page.p-enter .rv{animation:lRise .45s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--k,0)*40ms)}
+html.lite .overlay.open{animation:lIn .3s cubic-bezier(.16,1,.3,1)}
+html.lite .sheet-backdrop.open .sheet{animation:lSheet .32s cubic-bezier(.16,1,.3,1)}
+html.lite .sheet-backdrop{background:rgba(3,2,10,.78)}
+html.lite #fan,html.lite #atlas{background:rgba(3,2,10,.86)}
+html.lite .card,html.lite .wc,html.lite .tx,html.lite .dc,html.lite .ghc{transition:none}
+html.lite input,html.lite select,html.lite textarea{font-size:16px}
+html.lite .btn-gold{background-size:100% 100%}
+html.lite .btn-gold::after,html.lite .btn-gold::before{animation:none!important}
+html.lite .avatar{animation:none}
+html.lite.lite2 #dust,html.lite.lite2 #scene{display:none}
+html.lite.lite2 *,html.lite.lite2 *::before,html.lite.lite2 *::after{animation-duration:.01ms!important;animation-delay:0s!important}
+@keyframes lOut{to{opacity:0;transform:translate3d(0,8px,0)}}
+@keyframes lIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
+@keyframes lRise{from{opacity:0;transform:translate3d(0,16px,0)}to{opacity:1;transform:none}}
+@keyframes lSheet{from{transform:translate3d(0,40px,0);opacity:0}to{transform:none;opacity:1}}
+@media(max-width:760px){.page{contain:layout style}#island{display:none!important}}
+.errbox{border:1px solid rgba(240,138,138,.4);background:rgba(240,138,138,.08);border-radius:18px;padding:14px;margin-bottom:14px}.errbox b{color:var(--exp)}
+
+body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .9 0 0 0 0 .7 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.045;mix-blend-mode:normal}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.38))}
+html[data-theme=light] body::before{opacity:.03}html[data-theme=light] body::after{background:radial-gradient(120% 90% at 50% 40%,transparent 60%,rgba(120,90,30,.12))}
+.sec{display:flex;align-items:center;gap:10px}
+.sec::before{content:'';width:7px;height:7px;transform:rotate(45deg);background:var(--goldg);flex:none;box-shadow:0 0 10px rgba(var(--acc),.7)}
+.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.card{box-shadow:0 1px 0 rgba(255,255,255,.07) inset,0 0 0 1px rgba(var(--acc),.05),0 24px 50px -30px rgba(0,0,0,.7)}
+.card-h h3,.sec-h h3{letter-spacing:.01em}
+.hero{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 7px rgba(0,0,0,.16),inset 0 0 0 8px rgba(var(--acc),.2)}
+.hero #spark{display:block;width:100%;height:64px;margin:4px 0 12px}
+.h-bal{font-size:clamp(40px,12.5vw,60px);letter-spacing:-.01em}
+.greet h1{font-size:clamp(30px,8.6vw,46px);line-height:1.08}
+.qa-row button{background:linear-gradient(160deg,rgba(var(--acc),.12),transparent 62%),var(--s1);font-weight:600;border-color:rgba(var(--acc),.18)}
+.qa-row button::after{content:'';position:absolute;left:18%;right:18%;bottom:0;height:2px;border-radius:2px;background:var(--goldg);opacity:.5}
+#dock{box-shadow:0 22px 50px -12px rgba(0,0,0,.85),0 0 0 1px var(--line),inset 0 1px 0 rgba(255,255,255,.12)}
+.tile3{overflow:hidden}
+.tile3 b.money,.tile3 .money{font-size:clamp(13px,4vw,18px);white-space:nowrap}
+.tile3{padding-left:10px;padding-right:10px}
+.tx.in .ico{background:rgba(77,240,176,.12);color:var(--inc)}
+.tx.tf .ico{background:rgba(var(--acc),.2);color:var(--gold)}
+.list>.tx+.tx{border-top:1px dashed rgba(var(--acc),.12);border-radius:0}
+.dc{background:linear-gradient(135deg,rgba(var(--acc),.06),transparent 60%),var(--s1)}
+.dc.lent{border-left:3px solid var(--inc);background:linear-gradient(135deg,rgba(77,240,176,.09),transparent 60%),var(--s1)}
+.dc.borrow{border-left:3px solid var(--warn);background:linear-gradient(135deg,rgba(255,203,107,.09),transparent 60%),var(--s1)}
+.dc .avatar{box-shadow:0 0 0 3px var(--s1),0 0 0 4px var(--line)}
+.ghc{background:linear-gradient(150deg,rgba(var(--acc),.1),transparent 55%),var(--s1)}
+.ghc .em{display:grid;place-items:center;width:54px;height:54px;border-radius:18px;background:rgba(var(--acc),.12);border:1px solid var(--line);font-size:27px;flex:none}
+.empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:34px 12px}
+.empty .i{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;border:1px dashed var(--line);color:var(--gold);background:rgba(var(--acc),.06);font-size:30px}
+.avatar.big{box-shadow:0 0 0 4px var(--bg),0 0 0 5px var(--line),0 20px 40px -12px rgba(var(--acc),.6)}
+.ph h1{letter-spacing:-.01em}
+.ph::after{box-shadow:0 0 14px rgba(var(--acc),.35)}
+.chip{font-weight:600}
+.input{border-radius:16px}
+.sheet{box-shadow:0 -30px 80px -20px rgba(0,0,0,.7),0 0 0 1px var(--line)}
+.sheet .grab{background:var(--goldg);opacity:.6}
+@media(hover:hover){.card:hover{border-color:rgba(var(--acc),.3);transform:translateY(-2px)}}
+html.lite body::after{background:radial-gradient(120% 90% at 50% 40%,transparent 60%,rgba(0,0,0,.3))}
 </style>
 </head>
 <body>
@@ -1001,10 +1084,16 @@ html[data-day="0"] #bg .b3{opacity:.65}
   <div class="row mt"><button class="btn-ghost grow" onclick="resetToMyUID()" data-t>Về dữ liệu của tôi</button><button class="btn-gold grow" onclick="closeSheet('uid-modal')" data-t>Đóng</button></div>
 </div></div>
 <div id="bk-modal" class="sheet-backdrop" onclick="if(event.target===this)closeSheet('bk-modal')"><div class="sheet"><div class="grab"></div><h2 class="serif" data-t>Sao lưu & khôi phục</h2>
-  <div class="field"><label class="lbl">Email</label><input id="bk-email" type="email" class="input" placeholder="you@email.com"/></div>
-  <button class="btn-gold w-full" onclick="emailBackup()"><span class="i sm">send</span><span data-t>Tải về & gửi email</span></button>
-  <button class="btn-ghost w-full mt-s" onclick="downloadBackup()"><span class="i sm">download</span><span data-t>Tải xuống bản sao lưu</span></button>
-  <label class="upl mt-s"><span class="i">upload_file</span><span data-t>Khôi phục từ file .json</span><input type="file" accept=".json" class="hidden" onchange="restoreBackup(event)"/></label>
+  <div class="card glow"><div class="row between"><p class="eyebrow" data-t>Sao lưu đám mây</p><span id="bk-cloud"></span></div><p class="muted tiny mt-s" data-t>Dữ liệu được mã hóa và đồng bộ tự động giữa các thiết bị.</p><button class="btn-gold w-full mt-s" onclick="closeSheet('bk-modal');openSync()"><span class="i sm">cloud_sync</span><span data-t>Quản lý đồng bộ</span></button></div>
+  <p class="sec mt" data-t>Sao lưu thủ công</p>
+  <button class="btn-gold w-full" onclick="downloadBackup()"><span class="i sm">ios_share</span><span data-t>Lưu / chia sẻ file sao lưu</span></button>
+  <div class="row mt-s"><input id="bk-email" type="email" class="input" placeholder="you@email.com"/><button class="btn-ghost" onclick="emailBackup()"><span class="i sm">send</span></button></div>
+  <button class="btn-ghost w-full mt-s" onclick="copyBackupCode()"><span class="i sm">content_copy</span><span data-t>Sao chép mã sao lưu</span></button>
+  <p class="sec mt" data-t>Khôi phục</p>
+  <label class="upl"><span class="i">upload_file</span><span data-t>Khôi phục từ file .json</span><input type="file" accept=".json,application/json" class="hidden" onchange="restoreBackup(event)"/></label>
+  <textarea id="bk-code" class="input mt-s" rows="2" placeholder="POOR2:..."></textarea><button class="btn-ghost w-full mt-s" onclick="restoreCode()"><span class="i sm">restore</span><span data-t>Khôi phục từ mã</span></button>
+  <p class="sec mt" data-t>Bản tự động (7 ngày gần nhất)</p><div id="bk-snaps" class="list"></div>
+  <button class="link-btn" onclick="closeSheet('bk-modal')" data-t>Đóng</button>
 </div></div>
 <div id="ni-modal" class="sheet-backdrop" onclick="if(event.target===this)closeSheet('ni-modal')"><div class="sheet"><div class="grab"></div><h2 class="serif" data-t>Nhập từ ghi chú</h2><div id="ni-list" class="list"></div><div class="row mt"><button class="btn-ghost grow" onclick="closeSheet('ni-modal')" data-t>Hủy</button><button class="btn-gold grow" onclick="confirmNoteImport()" data-t>Nhập đã chọn</button></div></div></div>
 <div id="cf-modal" class="sheet-backdrop" onclick="if(event.target===this)closeSheet('cf-modal')"><div class="sheet"><div class="grab"></div><h2 class="serif" data-t>Lọc danh mục</h2><div id="cf-list" class="chips wrapx"></div><button class="btn-ghost w-full mt" onclick="pickCatF(-1)" data-t>Xóa bộ lọc</button></div></div>
@@ -2166,7 +2255,7 @@ function renderAI(){
 
 function burst(x,y,n){
   const c=$('fx');if(!c||reduce())return;const g=c.getContext&&c.getContext('2d');if(!g)return;
-  const d=Math.min(devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;
+  const d=window.LITE?1:Math.min(devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;
   const cols=['#f7e7ab','#d8b45a','#a8741f','#b3203f','#ffcb6b','#ffffff'],P=[];
   for(let i=0;i<(n||90);i++){const a=Math.random()*Math.PI*2,v=4+Math.random()*9;P.push({x:x*d,y:y*d,vx:Math.cos(a)*v*d,vy:(Math.sin(a)*v-5)*d,w:(4+Math.random()*6)*d,h:(3+Math.random()*4)*d,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[i%cols.length],l:1});}
   let last=performance.now();
@@ -2186,13 +2275,13 @@ function dustInit(){
   const c=$('dust');if(!c||reduce())return;const g=c.getContext&&c.getContext('2d');if(!g)return;
   let W=0,H=0,P=[],d=1,run=true,lt=0;
   const cols=['247,231,171','216,180,90','168,116,31'];
-  const rs=()=>{d=Math.min(devicePixelRatio||1,1.5);W=c.width=Math.round(innerWidth*d);H=c.height=Math.round(innerHeight*d);};
+  const rs=()=>{d=window.LITE?1:Math.min(devicePixelRatio||1,1.5);W=c.width=Math.round(innerWidth*d);H=c.height=Math.round(innerHeight*d);};
   rs();window.addEventListener('resize',rs);
   const N=innerWidth<700?26:54;
   for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:(.6+Math.random()*1.7)*d,vy:-(.1+Math.random()*.4)*d,vx:(Math.random()-.5)*.15*d,ph:Math.random()*6.28,c:cols[i%3]});
   document.addEventListener('visibilitychange',()=>{run=!document.hidden;if(run)requestAnimationFrame(loop);});
   function loop(t){
-    if(!run)return;requestAnimationFrame(loop);
+    if(!run||window.LITE2)return;requestAnimationFrame(loop);
     if(t-lt<32)return;lt=t;g.clearRect(0,0,W,H);
     const light=document.documentElement.dataset.theme==='light',k=light?.45:1;
     P.forEach(p=>{p.y+=p.vy;p.x+=p.vx+Math.sin(t/2200+p.ph)*.1*d;if(p.y<-8){p.y=H+8;p.x=Math.random()*W;}const a=(.25+.45*Math.abs(Math.sin(t/1600+p.ph)))*k;g.beginPath();g.fillStyle='rgba('+p.c+','+a.toFixed(3)+')';g.arc(p.x,p.y,p.r,0,6.283);g.fill();});
@@ -2213,6 +2302,7 @@ function fxInit(){
   }
   let sp=0,ev=null;
   document.addEventListener('pointermove',e=>{
+    if(window.LITE&&e.pointerType!=='mouse')return;
     ev=e;mx=e.clientX;my=e.clientY;
     if(fine&&!raf)raf=requestAnimationFrame(frame);
     if(sp)return;
@@ -2306,13 +2396,13 @@ function dustInit(){
   const c=$('dust');if(!c||reduce())return;const g=c.getContext&&c.getContext('2d');if(!g)return;
   let W=0,H=0,P=[],d=1,run=true,lt=0;
   const cols=['247,231,171','216,180,90','255,248,220','196,140,50'];
-  const rs=()=>{d=Math.min(devicePixelRatio||1,1.5);W=c.width=Math.round(innerWidth*d);H=c.height=Math.round(innerHeight*d);};
+  const rs=()=>{d=window.LITE?1:Math.min(devicePixelRatio||1,1.5);W=c.width=Math.round(innerWidth*d);H=c.height=Math.round(innerHeight*d);};
   rs();window.addEventListener('resize',rs);
-  const N=innerWidth<700?30:62;
+  const N=window.LITE?16:(innerWidth<700?30:62);
   for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:(.7+Math.random()*1.9)*d,vy:-(.08+Math.random()*.35)*d,vx:(Math.random()-.5)*.14*d,ph:Math.random()*6.28,c:cols[i%4],s:i%7===0});
   document.addEventListener('visibilitychange',()=>{run=!document.hidden;if(run)requestAnimationFrame(loop);});
   function loop(t){
-    if(!run)return;requestAnimationFrame(loop);
+    if(!run||window.LITE2)return;requestAnimationFrame(loop);
     if(t-lt<32)return;lt=t;g.clearRect(0,0,W,H);
     const k=document.documentElement.dataset.theme==='light'?.5:1;
     P.forEach(p=>{p.y+=p.vy;p.x+=p.vx+Math.sin(t/2400+p.ph)*.1*d;if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}
@@ -2412,8 +2502,8 @@ function sceneSet(s,wk){
   SC.kind=s?s.fx:null;SC.pal=s?s.pal:[];SC.wk=(wk==='rain'||wk==='storm')?wk:null;
   SC.P=[];SC.F=[];SC.rain=[];
   const c=$('scene');if(!c||reduce()||!c.getContext)return;
-  if(!SC.g){SC.g=c.getContext('2d');if(!SC.g)return;SC.cv=c;const rs=()=>{SC.d=Math.min(devicePixelRatio||1,1.5);SC.W=c.width=Math.round(innerWidth*SC.d);SC.H=c.height=Math.round(innerHeight*SC.d);};rs();window.addEventListener('resize',rs);document.addEventListener('visibilitychange',()=>{if(!document.hidden)sceneRun();});}
-  const mob=innerWidth<700,N={petal:mob?22:38,heart:mob?14:24,star:mob?14:22,balloon:mob?8:14,lantern:mob?9:15,bat:mob?5:9,snow:mob?44:80,fire:0}[SC.kind]||0;
+  if(!SC.g){SC.g=c.getContext('2d');if(!SC.g)return;SC.cv=c;const rs=()=>{SC.d=window.LITE?1:Math.min(devicePixelRatio||1,1.5);SC.W=c.width=Math.round(innerWidth*SC.d);SC.H=c.height=Math.round(innerHeight*SC.d);};rs();window.addEventListener('resize',rs);document.addEventListener('visibilitychange',()=>{if(!document.hidden)sceneRun();});}
+  const mob=innerWidth<700||!!window.LITE,N={petal:mob?22:38,heart:mob?14:24,star:mob?14:22,balloon:mob?8:14,lantern:mob?9:15,bat:mob?5:9,snow:mob?44:80,fire:0}[SC.kind]||0;
   for(let i=0;i<N;i++)SC.P.push(spawn(true));
   if(SC.wk)for(let i=0;i<(mob?60:110);i++)SC.rain.push({x:Math.random()*SC.W,y:Math.random()*SC.H,l:(10+Math.random()*16)*SC.d,v:(14+Math.random()*10)*SC.d});
   sceneRun();
@@ -2436,7 +2526,7 @@ function fwBurst(){
 function sceneRun(){if(SC.run)return;SC.run=true;requestAnimationFrame(sceneLoop);}
 function star5(g,r){g.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);}g.closePath();g.fill();}
 function sceneLoop(t){
-  if(document.hidden||(!SC.kind&&!SC.wk&&!SC.T.length)){SC.run=false;if(SC.g)SC.g.clearRect(0,0,SC.W,SC.H);return;}
+  if(window.LITE2||document.hidden||(!SC.kind&&!SC.wk&&!SC.T.length)){SC.run=false;if(SC.g)SC.g.clearRect(0,0,SC.W,SC.H);return;}
   requestAnimationFrame(sceneLoop);
   if(t-SC.lt<30)return;const dt=Math.min(3,(t-SC.lt)/16.6);SC.lt=t;
   const g=SC.g,W=SC.W,H=SC.H,d=SC.d,k=SC.kind;g.clearRect(0,0,W,H);
@@ -2815,6 +2905,160 @@ const __sp=showPage;
 showPage=function(p,...a){return __sp(p==='calc'?'notes':p,...a);};
 const __dw=renderDebts;
 renderDebts=function(){__dw();const w=$('d-wallet');if(w){const v=w.value;w.innerHTML=walOpts(true,v===''&&w._f?'':(v||lastW()));w._f=1;}};
+
+
+(function(){
+  let n=0,l=0,sum=0,go=false;
+  function f(t){
+    if(document.hidden){l=0;return requestAnimationFrame(f);}
+    if(l){const d=t-l;if(d<250){sum+=d;n++;}}
+    l=t;
+    if(n>=100){const a=sum/n;if(a>26&&!document.documentElement.classList.contains('lite2')){document.documentElement.classList.add('lite','lite2');window.LITE=true;window.LITE2=true;}return;}
+    requestAnimationFrame(f);
+  }
+  setTimeout(()=>requestAnimationFrame(f),4200);
+})();
+const SQL_FIX='create table if not exists public.poor_data_v2(device_id text primary key,payload text,updated_at timestamptz default now());\nalter table public.poor_data_v2 enable row level security;\ndrop policy if exists poor_all on public.poor_data_v2;\ncreate policy poor_all on public.poor_data_v2 for all to anon using (true) with check (true);';
+const REST=SUPA_URL+'/rest/v1/poor_data_v2';
+async function rq(method,qs,body,extra){
+  const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),15000);
+  try{
+    const r=await fetch(REST+qs,{method,headers:{apikey:SUPA_KEY,'Content-Type':'application/json',...(extra||{})},body:body?JSON.stringify(body):undefined,signal:ctl.signal});
+    const t=await r.text();let j=null;try{j=t?JSON.parse(t):null;}catch(e){}
+    if(!r.ok){const e=new Error((j&&(j.message||j.hint))||('HTTP '+r.status));e.status=r.status;e.code=j&&j.code;throw e;}
+    return j;
+  }catch(e){if(e.name==='AbortError'){e.message='Hết thời gian chờ';e.status=0;}else if(e.status===undefined){e.status=0;e.message=navigator.onLine?'Không kết nối được máy chủ':'Thiết bị đang offline';}throw e;}
+  finally{clearTimeout(to);}
+}
+const rGet=async id=>{const a=await rq('GET','?select=payload,updated_at&limit=1&device_id=eq.'+encodeURIComponent(id));return a&&a[0]||null;};
+const rPut=(id,payload)=>rq('POST','?on_conflict=device_id',{device_id:id,payload,updated_at:new Date().toISOString()},{Prefer:'resolution=merge-duplicates,return=minimal'});
+async function rPatchIf(id,old,payload){const a=await rq('PATCH','?device_id=eq.'+encodeURIComponent(id)+'&updated_at=eq.'+encodeURIComponent(old),{payload,updated_at:new Date().toISOString()},{Prefer:'return=representation'});return Array.isArray(a)&&a.length>0;}
+getSupa=function(){return{ok:1};};
+async function pushPull(force){
+  if(viewingUID)return;
+  if(syncBusy){syncAgain=true;return;}
+  syncBusy=true;setSyncIcon('sync');
+  try{
+    const id=devId();let done=false;
+    for(let k=0;k<3&&!done;k++){
+      const row=await rGet(id);
+      let R=null;if(row&&row.payload){const d=await readEnc(row.payload,id);if(d)R=migrate(d);}
+      let rr=null,merged=db;
+      if(R){rr=JSON.parse(JSON.stringify(R));ensureUList(rr.tx);if(!rr.mt)rr.mt={};merged=mergeDb(db,rr);}
+      const cm=canon(merged);
+      if(R&&cm!==canon(db))applyMerged(merged);
+      const need=!R||cm!==canon(rr)||force===2;
+      if(!need){done=true;break;}
+      const payload=await encStr(JSON.stringify(db),id);
+      if(row){done=await rPatchIf(id,row.updated_at,payload);}else{await rPut(id,payload);done=true;}
+    }
+    if(!done)await rPut(id,await encStr(JSON.stringify(db),id));
+    lastSync=Date.now();syncErr=null;setSyncIcon('done');
+  }catch(e){syncErr=e;setSyncIcon('off');}
+  finally{syncBusy=false;if(syncAgain){syncAgain=false;setTimeout(pushPull,500);}}
+  if($('sync-modal')&&$('sync-modal').classList.contains('open'))renderSync();
+}
+async function pushReceipt(id,url){if(viewingUID)return;try{await rPut(devId()+'~'+id,await encStr(url,devId()));}catch(e){}}
+async function pullReceipt(id){
+  try{const r=await rGet(devId()+'~'+id);if(r&&r.payload){const u=await decStr(r.payload,devId());if(u){try{await idbPut(id,await encStr(u,rkId()));}catch(e){}return u;}}}catch(e){}
+  return null;
+}
+async function adoptSync(raw){
+  const S=parseLink(raw);if(!S)return toast('Mã liên kết không hợp lệ');
+  if(S===devId())return toast('Thiết bị đã được liên kết');
+  const b=$('sync-link-btn');if(b)b.style.opacity='.6';
+  try{
+    let row;try{row=await rGet(S);}catch(e){syncErr=e;renderSync();return toast('Lỗi: '+e.message);}
+    if(!row){toast('Không tìm thấy dữ liệu của mã này');return;}
+    rkId();try{localStorage.setItem(LS_DEV,S);}catch(e){return;}
+    _keys={};await pushPull(2);pushAllReceipts();
+    renderAll();renderSync();closeSheet('sync-modal');toast('Đã liên kết — dữ liệu hai thiết bị đã được gộp');
+  }finally{if(b)b.style.opacity='1';}
+}
+function errHelp(){
+  const e=syncErr;if(!e)return'';
+  const miss=e.status===404||e.code==='42P01'||e.code==='PGRST205',rls=e.status===401||e.status===403||e.code==='42501';
+  let m=esc(e.message||'Lỗi');
+  if(miss)m='Bảng <b>poor_data_v2</b> chưa tồn tại trên Supabase.';else if(rls)m='Supabase chưa cấp quyền ghi cho ứng dụng (RLS).';
+  return`<div class="errbox"><b>${m}</b>${miss||rls?`<p class="tiny muted mt-s">Mở Supabase → SQL Editor, dán đoạn lệnh dưới đây rồi bấm Run, sau đó bấm Thử lại.</p><textarea class="input mt-s" rows="5" readonly onclick="this.select()" style="font-size:11px;font-family:monospace">${esc(SQL_FIX)}</textarea><button class="btn-ghost w-full mt-s" onclick="copyText(SQL_FIX)"><span class="i sm">content_copy</span>Sao chép lệnh SQL</button>`:''}<button class="btn-gold w-full mt-s" onclick="pushPull(true)"><span class="i sm">refresh</span>Thử lại</button></div>`;
+}
+function copyText(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();}).finally(()=>toast('Đã sao chép'));}
+const __rs=renderSync;
+renderSync=function(){__rs();const b=$('sync-body');if(b&&syncErr){const d=document.createElement('div');d.innerHTML=errHelp();b.insertBefore(d.firstChild,b.firstChild);}};
+
+async function idbKeys(){const d=await idb();return new Promise(res=>{const q=d.transaction('f').objectStore('f').getAllKeys();q.onsuccess=()=>res(q.result||[]);q.onerror=()=>res([]);});}
+async function autoSnap(force){
+  if(viewingUID)return;
+  try{
+    const k='bk_'+todayStr(),keys=await idbKeys();
+    if(force||!keys.includes(k))await idbPut(k,await encStr(JSON.stringify(db),rkId()));
+    const all=keys.filter(x=>/^bk_\d/.test(x)).sort();
+    while(all.length>7){await idbDel(all.shift());}
+  }catch(e){}
+}
+async function snapList(){const ks=(await idbKeys()).filter(x=>/^bk_\d/.test(x)).sort().reverse();const out=[];for(const k of ks){try{const e=await idbGet(k);const d=JSON.parse(await decStr(e,rkId()));out.push({k,n:d.tx.length,date:k.slice(3),m:d});}catch(x){}}return out;}
+function stampAll(m){
+  const n=Date.now();m.mt=m.mt||{};Object.keys(SYNC_COLS).forEach(c=>{m.mt[c]=n;});
+  ensureUList(m.tx);m.tx.forEach(t=>{t.m=n;});
+  const keep=new Set(m.tx.map(t=>t.u));m.tomb={...(m.tomb||{}),...(db.tomb||{})};
+  db.tx.forEach(t=>{if(!keep.has(t.u))m.tomb[t.u]=n;});keep.forEach(u=>{delete m.tomb[u];});
+  m.savedAt=n;return m;
+}
+async function applyRestore(data,receipts){
+  const m=stampAll(migrate(data));
+  for(const k of Object.keys(receipts||{})){try{await idbPut(k,await encStr(receipts[k],rkId()));}catch(e){}}
+  db=m;_sg=null;_txg=null;baseline();saveData();applyTheme();applyLang();applyEnv();renderAll();closeSheet('bk-modal');toast(tr('Đã khôi phục'));pushPull(2);
+}
+function parseBackup(b){if(!b||!b.data||!Array.isArray(b.data.tx))return null;return b;}
+function restoreBackup(ev){
+  const f=ev.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=async x=>{try{const b=parseBackup(JSON.parse(x.target.result));if(!b)return toast(tr('File không hợp lệ'));if(!await confirmDlg('Khôi phục bản sao lưu này? Dữ liệu hiện tại sẽ được thay thế.'))return;await applyRestore(b.data,b.receipts);}catch(err){toast(tr('File không hợp lệ'));}};
+  r.readAsText(f);ev.target.value='';
+}
+async function restoreSnap(k){
+  const l=await snapList(),s=l.find(x=>x.k===k);if(!s)return;
+  if(!await confirmDlg('Khôi phục bản tự động ngày '+s.date+'? Dữ liệu hiện tại sẽ được thay thế.'))return;
+  await applyRestore(s.m,null);
+}
+async function codeEnc(obj){
+  const str=JSON.stringify(obj),en=new TextEncoder().encode(str);
+  if(window.CompressionStream){const cs=new Blob([en]).stream().pipeThrough(new CompressionStream('gzip'));const u=new Uint8Array(await new Response(cs).arrayBuffer());return'POOR2:'+b64(u);}
+  return'POOR1:'+b64(en);
+}
+async function codeDec(t){
+  t=t.trim();const p=t.slice(0,6),b=unb64(t.slice(6).replace(/\s+/g,''));
+  if(p==='POOR2:'){const ds=new Blob([b]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(ds).text());}
+  if(p==='POOR1:')return JSON.parse(new TextDecoder().decode(b));
+  throw 0;
+}
+async function copyBackupCode(){const b=await buildBackup();b.receipts={};copyText(await codeEnc(b));}
+async function restoreCode(){
+  const v=$('bk-code').value;if(!v.trim())return toast(tr('Không hợp lệ'));
+  try{const b=parseBackup(await codeDec(v));if(!b)throw 0;if(!await confirmDlg('Khôi phục bản sao lưu này? Dữ liệu hiện tại sẽ được thay thế.'))return;await applyRestore(b.data,b.receipts);$('bk-code').value='';}catch(e){toast(tr('Mã không hợp lệ'));}
+}
+async function shareFile(name,text){
+  try{const f=new File([text],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Poor backup'});return true;}}catch(e){if(e&&e.name==='AbortError')return true;}
+  return false;
+}
+async function downloadBackup(){
+  const name='poor_backup_'+todayStr()+'.json',text=JSON.stringify(await buildBackup());
+  if(await shareFile(name,text))return toast(tr('Đã sao lưu'));
+  dlFile(name,text,'application/json');toast(tr('Đã tải xuống'));
+}
+async function emailBackup(){
+  const e=$('bk-email').value.trim();if(!e.includes('@'))return toast(tr('Email không hợp lệ'));
+  const name='poor_backup_'+todayStr()+'.json',text=JSON.stringify(await buildBackup());
+  if(await shareFile(name,text))return;
+  dlFile(name,text,'application/json');setTimeout(()=>{location.href='mailto:'+e+'?subject='+encodeURIComponent('Poor Backup')+'&body='+encodeURIComponent('Đính kèm file '+name+' vừa tải về.');},600);
+}
+async function openBackup(){
+  $('bk-email').value=db.profile.email||'';openSheet('bk-modal');
+  const l=await snapList(),b=$('bk-snaps');
+  b.innerHTML=l.length?l.map(s=>`<div class="item"><div class="l"><span class="ic"><span class="i sm">history</span></span><div><b>${fmtDate(s.date)}</b><small>${s.n} ${tr('giao dịch')}</small></div></div><button class="btn-ghost" style="padding:8px 14px" onclick="restoreSnap('${s.k}')">${tr('Khôi phục')}</button></div>`).join(''):`<p class="muted tiny">${tr('Chưa có bản tự động')}</p>`;
+  const st=$('bk-cloud');if(st)st.innerHTML=isStrong()?`<span class="badge g">● ${tr('Đang đồng bộ đám mây')}</span>`:`<span class="badge w">● ${tr('Chưa bật đồng bộ')}</span>`;
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)autoSnap(true);});
+setTimeout(()=>autoSnap(false),6000);
 
 const __boot=()=>init().catch(e=>{const s=$('splash');if(s)s.remove();});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',__boot);else __boot();
