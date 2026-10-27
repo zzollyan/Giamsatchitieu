@@ -3060,6 +3060,120 @@ async function openBackup(){
 document.addEventListener('visibilitychange',()=>{if(document.hidden)autoSnap(true);});
 setTimeout(()=>autoSnap(false),6000);
 
+Object.keys(SYNC_COLS).forEach(k=>{if(k!=='settings')delete SYNC_COLS[k];});
+const ICOL={wallets:w=>w.name,cats:c=>c.name,goals:g=>String(g.id),recurring:r=>String(r.id),notes:n=>String(n.id),debts:d=>d.u};
+function ensureDU(list){(list||[]).forEach(d=>{if(!d.u)d.u='d'+hashS([d.name,d.type,d.date,d.id].join('|'));});}
+const isig=it=>stable({...it,m:0});
+function itemSigs(x){const o={};Object.keys(ICOL).forEach(c=>{o[c]={};(x[c]||[]).forEach(it=>{o[c][ICOL[c](it)]=isig(it);});});return o;}
+let _ig=null;
+function baseline(){
+  if(!db.mt)db.mt={};if(!db.tomb)db.tomb={};
+  ensureUList(db.tx);ensureDU(db.debts);
+  _sg=colSigs();Object.keys(SYNC_COLS).forEach(c=>{if(db.mt[c]==null)db.mt[c]=db.savedAt||0;});
+  db.tx.forEach(t=>{if(t.m==null)t.m=0;});
+  Object.keys(ICOL).forEach(c=>(db[c]||[]).forEach(it=>{if(it.m==null)it.m=0;}));
+  _txg=txSigs();_ig=itemSigs(db);
+}
+function touchDb(){
+  if(!_sg||!_txg||!_ig){baseline();return;}
+  const now=Date.now();if(!db.mt)db.mt={};if(!db.tomb)db.tomb={};
+  ensureUList(db.tx);ensureDU(db.debts);
+  const sg=colSigs();Object.keys(sg).forEach(c=>{if(sg[c]!==_sg[c])db.mt[c]=now;});_sg=sg;
+  const tg=txSigs();
+  db.tx.forEach(t=>{if(_txg[t.u]===undefined||_txg[t.u]!==tg[t.u])t.m=now;});
+  Object.keys(_txg).forEach(u=>{if(tg[u]===undefined)db.tomb[u]=now;});
+  _txg=txSigs();
+  const ig=itemSigs(db);
+  Object.keys(ICOL).forEach(c=>{
+    (db[c]||[]).forEach(it=>{const k=ICOL[c](it);if(_ig[c][k]===undefined||_ig[c][k]!==ig[c][k])it.m=now;});
+    Object.keys(_ig[c]).forEach(k=>{if(ig[c][k]===undefined)db.tomb[c+':'+k]=now;});
+  });
+  _ig=itemSigs(db);
+  Object.keys(db.tomb).forEach(u=>{if(now-db.tomb[u]>90*864e5)delete db.tomb[u];});
+}
+function pickItem(c,a,b){
+  const am=a.m||0,bm=b.m||0;
+  if(bm!==am)return bm>am?b:a;
+  if(c==='wallets'){const x=Math.abs(a.balance||0),y=Math.abs(b.balance||0);if(x!==y)return y>x?b:a;}
+  return stable(b)>stable(a)?b:a;
+}
+function mergeItems(c,L,R,tomb){
+  const kf=ICOL[c],by={},order=[];
+  [...(L||[]),...(R||[])].forEach(it=>{
+    const k=kf(it),t=tomb[c+':'+k];
+    if(t&&t>(it.m||0))return;
+    if(!(k in by)){by[k]=it;order.push(k);}else by[k]=pickItem(c,by[k],it);
+  });
+  return order.map(k=>JSON.parse(JSON.stringify(by[k])));
+}
+function coalesceDebts(m){
+  const groups={};
+  m.debts.forEach(d=>{if(!d.paid){(groups[normDebt(d.name)]=groups[normDebt(d.name)]||[]).push(d);}});
+  Object.keys(groups).forEach(k=>{
+    const g=groups[k];if(g.length<2)return;
+    g.sort((a,b)=>a.u<b.u?-1:1);
+    const s=g[0];let sum=0,log=[],dt=s.date;
+    g.forEach(d=>{sum+=(d.type==='owed'?1:-1)*d.amount;log=log.concat(d.log||[]);if((d.date||'')>dt)dt=d.date;});
+    log.sort((a,b)=>(a.d||'')<(b.d||'')?-1:(a.d||'')>(b.d||'')?1:(a.delta||0)-(b.delta||0));
+    const now=Math.max(...g.map(d=>d.m||0))+1;
+    s.log=log.slice(-12);s.date=dt;s.m=now;
+    if(Math.abs(sum)<1){s.amount=0;s.paid=true;}else{s.amount=Math.abs(sum);s.type=sum>0?'owed':'iowe';}
+    g.slice(1).forEach(d=>{m.tomb['debts:'+d.u]=now;});
+    m.debts=m.debts.filter(d=>d===s||!g.includes(d));
+  });
+}
+function mergeDb(L,R){
+  const m=JSON.parse(JSON.stringify(L));
+  m.mt=m.mt||{};const rm=R.mt||{};
+  m.tomb={...(L.tomb||{})};Object.keys(R.tomb||{}).forEach(u=>{m.tomb[u]=Math.max(m.tomb[u]||0,R.tomb[u]);});
+  Object.keys(SYNC_COLS).forEach(c=>{
+    const a=m.mt[c]||0,b=rm[c]||0,ks=SYNC_COLS[c];
+    const diff=stable(ks.map(k=>R[k]))!==stable(ks.map(k=>L[k]));
+    if(diff&&(b>a||(b===a&&(R.savedAt||0)>(L.savedAt||0)))){ks.forEach(k=>{m[k]=JSON.parse(JSON.stringify(R[k]));});m.mt[c]=b;}
+  });
+  ensureDU(L.debts);ensureDU(R.debts);ensureDU(m.debts);
+  Object.keys(ICOL).forEach(c=>{m[c]=mergeItems(c,L[c],R[c],m.tomb);});
+  const used=new Set();let dn=Math.max(L.debtNext||1,R.debtNext||1);
+  m.debts.forEach(d=>{if(d.id>=dn)dn=d.id+1;});
+  [...m.debts].sort((a,b)=>a.u<b.u?-1:1).forEach(d=>{if(!d.id||used.has(d.id))d.id=dn++;used.add(d.id);});
+  m.debtNext=dn;
+  coalesceDebts(m);
+  const lu=new Set(L.tx.map(t=>t.u)),byU={};
+  [...L.tx,...R.tx].forEach(t=>{
+    const tt=m.tomb[t.u];if(tt&&tt>(t.m||0))return;
+    const o=byU[t.u];
+    if(!o||(t.m||0)>(o.m||0)||((t.m||0)===(o.m||0)&&stable(t)>stable(o)))byU[t.u]=JSON.parse(JSON.stringify(t));
+  });
+  const list=Object.values(byU);let nid=Math.max(L.nextId||1,R.nextId||1);
+  list.forEach(t=>{if((t.id||0)>=nid)nid=t.id+1;});
+  const ui=new Set();
+  list.sort((a,b)=>(lu.has(b.u)?1:0)-(lu.has(a.u)?1:0));
+  list.forEach(t=>{if(!t.id||ui.has(t.id))t.id=nid++;ui.add(t.id);});
+  list.sort((a,b)=>b.date!==a.date?b.date.localeCompare(a.date):((b.time||'').localeCompare(a.time||'')||b.id-a.id));
+  m.tx=list;m.nextId=nid;m.savedAt=Math.max(L.savedAt||0,R.savedAt||0);
+  m.notes.sort((a,b)=>(b.id||0)-(a.id||0));
+  return m;
+}
+function canon(x){
+  const o={...x};PREF_KEYS.forEach(k=>delete o[k]);
+  o.tx=[...x.tx].sort((a,b)=>a.u<b.u?-1:a.u>b.u?1:0).map(t=>{const q={...t};delete q.id;return q;});
+  Object.keys(ICOL).forEach(c=>{const kf=ICOL[c];o[c]=[...(x[c]||[])].sort((a,b)=>kf(a)<kf(b)?-1:kf(a)>kf(b)?1:0).map(i=>{if(c!=='debts')return i;const q={...i};delete q.id;return q;});});
+  delete o.nextId;delete o.debtNext;
+  return stable(o);
+}
+function stampAll(m){
+  const n=Date.now();m.mt=m.mt||{};Object.keys(SYNC_COLS).forEach(c=>{m.mt[c]=n;});
+  ensureUList(m.tx);ensureDU(m.debts);m.tx.forEach(t=>{t.m=n;});
+  const keep=new Set(m.tx.map(t=>t.u));m.tomb={...(m.tomb||{}),...(db.tomb||{})};
+  db.tx.forEach(t=>{if(!keep.has(t.u))m.tomb[t.u]=n;});keep.forEach(u=>{delete m.tomb[u];});
+  Object.keys(ICOL).forEach(c=>{
+    const kf=ICOL[c],kk=new Set();
+    (m[c]||[]).forEach(it=>{it.m=n;kk.add(kf(it));delete m.tomb[c+':'+kf(it)];});
+    (db[c]||[]).forEach(it=>{const k=kf(it);if(!kk.has(k))m.tomb[c+':'+k]=n;});
+  });
+  m.savedAt=n;return m;
+}
+
 const __boot=()=>init().catch(e=>{const s=$('splash');if(s)s.remove();});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',__boot);else __boot();
 
