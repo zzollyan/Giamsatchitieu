@@ -685,6 +685,7 @@ html[data-theme=light] body::before{opacity:.03}html[data-theme=light] body::aft
 .sheet .grab{background:var(--goldg);opacity:.6}
 @media(hover:hover){.card:hover{border-color:rgba(var(--acc),.3);transform:translateY(-2px)}}
 html.lite body::after{background:radial-gradient(120% 90% at 50% 40%,transparent 60%,rgba(0,0,0,.3))}
+button.h-cur{font:inherit;font-size:10.5px;letter-spacing:.24em;font-weight:700}
 </style>
 </head>
 <body>
@@ -753,7 +754,7 @@ html.lite body::after{background:radial-gradient(120% 90% at 50% 40%,transparent
       <div class="ticker rv" style="--k:1"><div class="tk" id="ticker"></div></div>
       <div class="hero rv" id="vault" data-tilt style="--k:2">
         <i class="hero-glare"></i>
-        <div class="h-top"><p class="eyebrow" data-t>Số dư khả dụng</p><span class="h-cur" id="h-cur">VND</span></div>
+        <div class="h-top"><p class="eyebrow" data-t>Số dư khả dụng</p><span class="row" style="gap:8px"><button class="h-cur" style="cursor:pointer;font-family:inherit;color:inherit" onclick="event.stopPropagation();openAdjust()"><span data-t>Chỉnh số dư</span></button><span class="h-cur" id="h-cur">VND</span></span></div>
         <div class="h-bal money" id="bal">0₫</div>
         <div class="h-sub" id="bal-delta"></div>
         <svg id="spark" viewBox="0 0 300 58" preserveAspectRatio="none"><defs><linearGradient id="spf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8b45a" stop-opacity=".45"/><stop offset="1" stop-color="#d8b45a" stop-opacity="0"/></linearGradient></defs><path id="sp-fill" fill="url(#spf)"/><path id="sp-line" fill="none" stroke="url(#ag)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1076,6 +1077,7 @@ html.lite body::after{background:radial-gradient(120% 90% at 50% 40%,transparent
 <div class="field" id="mv-a-row"><label class="lbl" data-t>Số tiền</label><input id="mv-a" class="input" data-money inputmode="decimal" placeholder="0"/></div>
 <div class="field"><label class="lbl" data-t>Ví (tiền mặt / ngân hàng)</label><select id="mv-w" class="input"></select></div>
 <button id="mv-ok" class="btn-gold big w-full" onclick="mvOk()"></button><button class="link-btn" onclick="mvClose()" data-t>Hủy</button></div></div>
+<div id="adj-modal" class="sheet-backdrop" onclick="if(event.target===this)closeSheet('adj-modal')"><div class="sheet"><div class="grab"></div><h2 class="serif" data-t>Chỉnh số dư</h2><p class="muted tiny" style="margin-bottom:14px" data-t>Nhập số dư thực tế của từng ví. Ví để trống sẽ giữ nguyên. Phần chênh lệch được ghi thành giao dịch điều chỉnh, không tính vào chi tiêu hay thu nhập.</p><div id="adj-list"></div><button class="btn-gold big w-full" onclick="saveAdjust()" data-t>Lưu số dư</button><button class="link-btn" onclick="closeSheet('adj-modal')" data-t>Hủy</button></div></div>
 <div id="uid-modal" class="sheet-backdrop" onclick="if(event.target===this)closeSheet('uid-modal')"><div class="sheet"><div class="grab"></div><h2 class="serif" data-t>UID & chia sẻ dữ liệu</h2>
   <p class="muted tiny" style="margin:-8px 0 16px" data-t>Chia sẻ UID để người khác xem dữ liệu của bạn, hoặc nhập UID khác để xem (chỉ xem, không ghi đè).</p>
   <div class="card" style="margin-bottom:14px"><p class="eyebrow" data-t>UID của bạn</p><div class="row mt-s"><b id="uid-me" style="font-family:monospace;color:var(--gold);word-break:break-all;font-size:13px" class="grow"></b><button class="btn-ghost" onclick="copyUID()" data-t>Sao chép</button></div></div>
@@ -1726,7 +1728,7 @@ function renderProfile(){
 }
 
 function renderWallets(){
-  $('w-list').innerHTML=db.wallets.map((w,i)=>`<div class="item" style="cursor:default"><div class="l"><span class="ic"><span class="i sm">account_balance_wallet</span></span><div><b>${esc(w.name)}</b><small>${tr('Số dư ban đầu')}: ${fmt(w.balance)}</small></div></div><div class="row"><b class="money ${walletBal(w)<0?'exp':''}">${fmt(walletBal(w))}</b><button class="icon-btn sm" onclick="editWallet(${i})"><span class="i sm">edit</span></button><button class="icon-btn sm" onclick="delWallet(${i})"><span class="i sm">close</span></button></div></div>`).join('');
+  $('w-list').innerHTML=db.wallets.map((w,i)=>`<div class="item" style="cursor:default"><div class="l"><span class="ic"><span class="i sm">account_balance_wallet</span></span><div><b>${esc(w.name)}</b><small>${tr('Số dư ban đầu')}: ${fmt(w.balance)}</small></div></div><div class="row"><b class="money ${walletBal(w)<0?'exp':''}">${fmt(walletBal(w))}</b><button class="icon-btn sm" onclick="adjustWallet(${i})"><span class="i sm">tune</span></button><button class="icon-btn sm" onclick="delWallet(${i})"><span class="i sm">close</span></button></div></div>`).join('');
 }
 async function editWallet(i){const w=db.wallets[i];const v=await dialog({title:w.name,msg:tr('Số dư ban đầu của ví'),input:true,money:true,value:w.balance?fmtInput(String(Math.round(toDisp(w.balance)))):'',ph:'0',ok:tr('Lưu')});if(v==null)return;w.balance=Math.round(fromDisp(parseMoney(v)));saveData();renderAll();}
 function addWallet(){const name=$('w-name').value.trim();if(!name)return toast(tr('Điền đủ thông tin'));db.wallets.push({id:'w_'+uid(),name,balance:readVND('w-bal')});$('w-name').value='';$('w-bal').value='';saveData();renderAll();toast(tr('Đã thêm'));}
@@ -3174,6 +3176,24 @@ function stampAll(m){
   m.savedAt=n;return m;
 }
 
+
+function openAdjust(f){
+  $('adj-list').innerHTML=db.wallets.map((w,i)=>`<div class="field"><label class="lbl">${esc(w.name)} · ${tr('Hiện tại')}: ${fmt(walletBal(w))}</label><input id="adj-${i}" class="input" data-money inputmode="decimal" placeholder="${tr('Số dư thực tế')}"/></div>`).join('');
+  db.wallets.forEach((w,i)=>{const b=walletBal(w);if(b>0)setMoney('adj-'+i,b);});
+  closeOverlay('wallets-overlay');openSheet('adj-modal');
+  if(f!=null)setTimeout(()=>{const e=$('adj-'+f);if(e){e.focus();e.select();}},300);
+}
+function adjustWallet(i){openAdjust(i);}
+function saveAdjust(){
+  let n=0;
+  db.wallets.forEach((w,i)=>{
+    const e=$('adj-'+i);if(!e||e.value.trim()==='')return;
+    const d=readVND('adj-'+i)-walletBal(w);
+    if(d){walletTx(tr('Điều chỉnh số dư')+' · '+w.name,'Điều chỉnh','tune',d,w.name,'',todayStr());n++;}
+  });
+  if(!n){closeSheet('adj-modal');return toast(tr('Không có thay đổi'));}
+  saveData();renderAll();closeSheet('adj-modal');toast(tr('Đã lưu'));
+}
 const __boot=()=>init().catch(e=>{const s=$('splash');if(s)s.remove();});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',__boot);else __boot();
 
